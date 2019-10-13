@@ -1,5 +1,6 @@
 <template>
   <div id="vue-app">
+    <h1>Canard</h1>
     <router-view></router-view>
   </div>
 </template>
