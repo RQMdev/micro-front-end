@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom'
 
 const Page2 = () => (
   <div>
-    <div>Page 2</div>
-    <Link to="/">Retour</Link>
+    <img src="https://i.ytimg.com/vi/n62ZdxxbLZA/maxresdefault.jpg" alt="" />
+    <div className="navigation">
+      <Link to="/">Retour</Link>
+    </div>
   </div>
 )
 

@@ -3,8 +3,13 @@ import { Link } from 'react-router-dom'
 
 const Page1 = () => (
   <div>
-    <div>Page 1</div>
-    <Link to="/">Retour</Link>
+    <img
+      src="http://www.pethealthnetwork.com/sites/default/files/content/images/5-silent-killers-cats-475212379.jpg"
+      alt=""
+    />
+    <div className="navigation">
+      <Link to="/">Retour</Link>
+    </div>
   </div>
 )
 
