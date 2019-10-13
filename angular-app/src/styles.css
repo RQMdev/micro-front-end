@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+}
+
+#angular-app {
+  border: 20px solid red;
+  height: 100%;
+  text-align: center;
+}
+
+img {
+  margin: 10px 0;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+}
+
+.navigation > * {
+  padding: 5px 10px;
+  margin: 5px;
+  text-decoration: none;
+  border: 1px solid red;
+  color: red;
+  border-radius: 1000px;
+}
