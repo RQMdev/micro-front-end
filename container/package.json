@@ -1,0 +1,19 @@
+{
+  "name": "container",
+  "version": "1.0.0",
+  "description": "micro front end example container",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "serve -s -l 1337 & rollup index.js --file bundle.js --format iife --watch",
+    "watch": ""
+  },
+  "author": "RQM & Rostom35",
+  "license": "MIT",
+  "dependencies": {
+    "serve": "^11.2.0"
+  },
+  "devDependencies": {
+    "rollup": "^1.23.1"
+  }
+}
