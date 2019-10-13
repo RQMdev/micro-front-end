@@ -1,6 +1,5 @@
 <template>
   <div id="vue-app">
-    <img alt="Vue logo" src="./assets/logo.png" />
     <router-view></router-view>
   </div>
 </template>
@@ -12,12 +11,29 @@ export default {
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 #vue-app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  border: 20px solid green;
+  height: 100%;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+
+img {
+  margin: 10px 0;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+}
+
+.navigation > * {
+  padding: 5px 10px;
+  margin: 5px;
+  text-decoration: none;
+  border: 1px solid green;
+  color: green;
+  border-radius: 1000px;
 }
 </style>
