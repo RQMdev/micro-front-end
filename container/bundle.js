@@ -12,7 +12,10 @@
 
     connectedCallback() {
       this.innerHTML = `
-      <container-page></container-page>
+    <container-navbar></container-navbar>
+      <div id="app-container">
+        <container-page></container-page>
+      </div>
     `;
     }
   }
@@ -158,12 +161,75 @@
     }
   }
 
+  class ContainerLink extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    static get tagName() {
+      return 'container-link'
+    }
+
+    connectedCallback() {
+      this.path = this.getAttribute('path');
+      this.title = this.getAttribute('title');
+
+      this.render();
+    }
+
+    render() {
+      this.innerHTML = `
+      <a href="${this.path}">
+        ${this.title}
+      </a>
+    `;
+    }
+  }
+
+  class ContainerNavbar extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    static get tagName() {
+      return 'container-navbar'
+    }
+
+    render() {
+      this.innerHTML = `
+    <nav role="navigation">
+      <ul>
+      ${routes
+        .filter(route => route.title)
+        .map(
+          route => `
+            <li>
+              <container-link
+                path="${route.path}"
+                title="${route.title}"
+              ></container-link>
+            </li>
+          `
+        )
+        .join('')}
+      </ul>
+    </nav>
+  `;
+    }
+
+    connectedCallback() {
+      this.render();
+    }
+  }
+
 
 
   var Components = /*#__PURE__*/Object.freeze({
     __proto__: null,
     ContainerApp: ContainerApp,
-    ContainerPage: ContainerPage
+    ContainerPage: ContainerPage,
+    ContainerLink: ContainerLink,
+    ContainerNavbar: ContainerNavbar
   });
 
   Object.values(Components).forEach(component =>
