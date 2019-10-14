@@ -19,12 +19,15 @@ export default class ContainerPage extends HTMLElement {
     const frameworkRoot = this.createElementFromID(appModule)
     this.appendChild(frameworkRoot)
 
-    this.loadScript(
+    this.loadScripts(
       appModule.scripts.map(scriptPath => appModule.url + scriptPath)
+    )
+    this.loadStyles(
+      appModule.styles.map(stylePath => appModule.url + stylePath)
     )
   }
 
-  loadScript(scripts) {
+  loadScripts(scripts) {
     return this.promiseSerial(
       scripts.map(scriptPath => () =>
         new Promise((resolve, reject) => {
@@ -40,6 +43,26 @@ export default class ContainerPage extends HTMLElement {
           script.onload = resolve
           script.onerror = reject
           document.body.appendChild(script)
+        })
+      )
+    )
+  }
+
+  loadStyles(styles) {
+    return this.promiseSerial(
+      styles.map(stylePath => () =>
+        new Promise((resolve, reject) => {
+          const previousStyle = document.getElementById(stylePath)
+          if (previousStyle) {
+            previousStyle.remove()
+          }
+          const style = document.createElement('link')
+          style.href = stylePath
+          style.id = stylePath
+          style.rel = 'stylesheet'
+          style.onload = resolve
+          style.onerror = reject
+          document.head.appendChild(style)
         })
       )
     )

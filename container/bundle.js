@@ -14,7 +14,9 @@
       this.innerHTML = `
       <container-router>
         <container-navbar></container-navbar>
+        <div id="app-container">
         <router-outlet></router-outlet>
+        </div>
       </container-router>
     `;
     }
@@ -56,7 +58,8 @@
           '/static/js/runtime-main.js',
           '/static/js/main.chunk.js',
           '/static/js/2.chunk.js'
-        ]
+        ],
+        styles: ['/static/css/main.chunk.css']
       }
     },
     {
@@ -71,7 +74,8 @@
           '/runtime-es2015.js',
           '/styles-es2015.js',
           '/vendor-es2015.js'
-        ]
+        ],
+        styles: []
       }
     },
     {
@@ -84,7 +88,8 @@
           '/static/js/runtime-main.js',
           '/static/js/main.chunk.js',
           '/static/js/2.chunk.js'
-        ]
+        ],
+        styles: ['/static/css/main.chunk.css']
       }
     },
     {
@@ -93,7 +98,8 @@
       module: {
         id: 'vue-app',
         url: 'http://localhost:8080',
-        scripts: ['/js/app.js', '/js/chunk-vendors.js']
+        scripts: ['/js/app.js', '/js/chunk-vendors.js'],
+        styles: ['/css/app.css']
       }
     }
   ];
@@ -153,12 +159,15 @@
       const frameworkRoot = this.createElementFromID(appModule);
       this.appendChild(frameworkRoot);
 
-      this.loadScript(
+      this.loadScripts(
         appModule.scripts.map(scriptPath => appModule.url + scriptPath)
+      );
+      this.loadStyles(
+        appModule.styles.map(stylePath => appModule.url + stylePath)
       );
     }
 
-    loadScript(scripts) {
+    loadScripts(scripts) {
       return this.promiseSerial(
         scripts.map(scriptPath => () =>
           new Promise((resolve, reject) => {
@@ -174,6 +183,26 @@
             script.onload = resolve;
             script.onerror = reject;
             document.body.appendChild(script);
+          })
+        )
+      )
+    }
+
+    loadStyles(styles) {
+      return this.promiseSerial(
+        styles.map(stylePath => () =>
+          new Promise((resolve, reject) => {
+            const previousStyle = document.getElementById(stylePath);
+            if (previousStyle) {
+              previousStyle.remove();
+            }
+            const style = document.createElement('link');
+            style.href = stylePath;
+            style.id = stylePath;
+            style.rel = 'stylesheet';
+            style.onload = resolve;
+            style.onerror = reject;
+            document.head.appendChild(style);
           })
         )
       )
@@ -241,7 +270,7 @@
         this.resolveRoute('/');
       }
       this.changePage(path);
-      this.renderRoute(targetRoute, event);
+      this.renderRoute(targetRoute, event, path);
     }
 
     findRoute(path) {
@@ -256,13 +285,16 @@
       // window.dispatchEvent(new CustomEvent('page-change'))
     }
 
-    renderRoute(targetRoute, event) {
-      if (this.actualRoute !== targetRoute) {
+    renderRoute(targetRoute, event, path) {
+      if (this.currentRoute !== targetRoute) {
         event.preventDefault();
         const routerOutlet = this.querySelector('router-outlet');
         routerOutlet.innerHTML = '<container-page></container-page>';
-        this.actualRoute = targetRoute;
-      } else if (targetRoute.path.startsWith(this.actualRoute.path)) ; else {
+        this.currentRoute = targetRoute;
+        this.currentPath = path;
+      } else if (path === this.currentPath) {
+        event.preventDefault();
+      } else if (targetRoute.path.startsWith(this.currentRoute.path)) ; else {
         event.preventDefault();
       }
     }

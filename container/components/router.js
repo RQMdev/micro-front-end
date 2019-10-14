@@ -43,7 +43,7 @@ export default class ContainerRouter extends HTMLElement {
       this.resolveRoute('/')
     }
     this.changePage(path)
-    this.renderRoute(targetRoute, event)
+    this.renderRoute(targetRoute, event, path)
   }
 
   findRoute(path) {
@@ -58,13 +58,16 @@ export default class ContainerRouter extends HTMLElement {
     // window.dispatchEvent(new CustomEvent('page-change'))
   }
 
-  renderRoute(targetRoute, event) {
-    if (this.actualRoute !== targetRoute) {
+  renderRoute(targetRoute, event, path) {
+    if (this.currentRoute !== targetRoute) {
       event.preventDefault()
       const routerOutlet = this.querySelector('router-outlet')
       routerOutlet.innerHTML = '<container-page></container-page>'
-      this.actualRoute = targetRoute
-    } else if (targetRoute.path.startsWith(this.actualRoute.path)) {
+      this.currentRoute = targetRoute
+      this.currentPath = path
+    } else if (path === this.currentPath) {
+      event.preventDefault()
+    } else if (targetRoute.path.startsWith(this.currentRoute.path)) {
       // react-router check if event was preventDefault and don't do anything if it is
     } else {
       event.preventDefault()

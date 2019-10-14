@@ -1,0 +1,35 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  /* border: 10px solid black; */
+}
+
+#app-container {
+  height: calc(100vh - 50px);
+}
+
+nav > ul {
+  padding: 16px;
+  margin: 0;
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: space-evenly;
+}
+
+nav li {
+  list-style: none;
+}
+
+nav a {
+  text-decoration: none;
+  color: black;
+  padding: 5px 10px;
+  margin: 5px;
+  border: 1px solid black;
+  border-radius: 1000px;
+}
