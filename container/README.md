@@ -16,6 +16,20 @@ this.addEventListener('click', event => {
 })
 ```
 
+add getLinkHref method to find 'A' link in the DOM
+
+```javascript
+getLinkHref(element) {
+    if (element.tagName === 'A') {
+      return element.href || ''
+    } else if (element.tagName !== 'BODY') {
+      return this.getLinkHref(element.parentElement)
+    } else {
+      return undefined
+    }
+  }
+```
+
 compare full current full path to new path
 
 ```javascript
@@ -31,3 +45,5 @@ renderRoute(targetRoute, event, path) {
 ```
 
 ## Step 1
+
+## Step 2

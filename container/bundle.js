@@ -244,16 +244,6 @@
       };
     }
 
-    getLinkHref(element) {
-      if (element.tagName === 'A') {
-        return element.href || ''
-      } else if (element.tagName !== 'BODY') {
-        return this.getLinkHref(element.parentElement)
-      } else {
-        return undefined
-      }
-    }
-
     resolveRoute(path, event = new Event('click')) {
       console.log('resolveRoute with path :', path);
       const targetRoute = this.findRoute(path);
