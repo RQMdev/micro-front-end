@@ -282,18 +282,14 @@
 
     changePage(path) {
       window.history.pushState(window.history.state, null, path);
-      // window.dispatchEvent(new CustomEvent('page-change'))
     }
 
-    renderRoute(targetRoute, event, path) {
+    renderRoute(targetRoute, event) {
       if (this.currentRoute !== targetRoute) {
         event.preventDefault();
         const routerOutlet = this.querySelector('router-outlet');
         routerOutlet.innerHTML = '<container-page></container-page>';
         this.currentRoute = targetRoute;
-        this.currentPath = path;
-      } else if (path === this.currentPath) {
-        event.preventDefault();
       } else if (targetRoute.path.startsWith(this.currentRoute.path)) ; else {
         event.preventDefault();
       }
