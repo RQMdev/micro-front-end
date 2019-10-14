@@ -41,7 +41,15 @@ renderRoute(targetRoute, event, path) {
       event.preventDefault()
   // ...
 }
+```
 
+fixe React behaviour:
+
+```javascript
+// router.js
+// renderRoute
+} else if (targetRoute.path.startsWith(this.currentRoute.path)) {
+      // react-router check if event was preventDefault and don't do anything if it is
 ```
 
 ## Step 1

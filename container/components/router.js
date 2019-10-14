@@ -45,8 +45,6 @@ export default class ContainerRouter extends HTMLElement {
       const routerOutlet = this.querySelector('router-outlet')
       routerOutlet.innerHTML = '<container-page></container-page>'
       this.currentRoute = targetRoute
-    } else if (targetRoute.path.startsWith(this.currentRoute.path)) {
-      // react-router check if event was preventDefault and don't do anything if it is
     } else {
       event.preventDefault()
     }

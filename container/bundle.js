@@ -272,7 +272,7 @@
         const routerOutlet = this.querySelector('router-outlet');
         routerOutlet.innerHTML = '<container-page></container-page>';
         this.currentRoute = targetRoute;
-      } else if (targetRoute.path.startsWith(this.currentRoute.path)) ; else {
+      } else {
         event.preventDefault();
       }
     }
