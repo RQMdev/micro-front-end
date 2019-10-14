@@ -9,10 +9,12 @@ export default class ContainerApp extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = `
-    <container-navbar></container-navbar>
-      <div id="app-container">
-        <container-page></container-page>
-      </div>
+      <container-router>
+        <container-navbar></container-navbar>
+        <div id="app-container">
+          <router-outlet></router-outlet>
+        </div>
+      </container-router>
     `
   }
 }
