@@ -13,36 +13,8 @@
     connectedCallback() {
       this.innerHTML = `
       <container-router>
-        <container-navbar></container-navbar>
-        <div id="app-container">
         <router-outlet></router-outlet>
-        </div>
       </container-router>
-    `;
-    }
-  }
-
-  class ContainerLink extends HTMLElement {
-    constructor() {
-      super();
-    }
-
-    static get tagName() {
-      return 'container-link'
-    }
-
-    connectedCallback() {
-      this.path = this.getAttribute('path');
-      this.title = this.getAttribute('title');
-
-      this.render();
-    }
-
-    render() {
-      this.innerHTML = `
-      <a href="${this.path}">
-        ${this.title}
-      </a>
     `;
     }
   }
@@ -103,42 +75,6 @@
       }
     }
   ];
-
-  class ContainerNavbar extends HTMLElement {
-    constructor() {
-      super();
-    }
-
-    static get tagName() {
-      return 'container-navbar'
-    }
-
-    render() {
-      this.innerHTML = `
-    <nav role="navigation">
-      <ul>
-      ${routes
-        .filter(route => route.title)
-        .map(
-          route => `
-            <li>
-              <container-link
-                path="${route.path}"
-                title="${route.title}"
-              ></container-link>
-            </li>
-          `
-        )
-        .join('')}
-      </ul>
-    </nav>
-  `;
-    }
-
-    connectedCallback() {
-      this.render();
-    }
-  }
 
   class ContainerPage extends HTMLElement {
     constructor() {
@@ -283,8 +219,6 @@
   var Components = /*#__PURE__*/Object.freeze({
     __proto__: null,
     ContainerApp: ContainerApp,
-    ContainerLink: ContainerLink,
-    ContainerNavbar: ContainerNavbar,
     ContainerPage: ContainerPage,
     ContainerRouter: ContainerRouter
   });

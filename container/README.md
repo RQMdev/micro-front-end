@@ -54,4 +54,91 @@ fixe React behaviour:
 
 ## Step 1
 
+a) Create navbar to navigate easily from our config:
+
+```javascript
+import { routes } from '../config'
+
+export default class ContainerNavbar extends HTMLElement {
+  constructor() {
+    super()
+  }
+
+  static get tagName() {
+    return 'container-navbar'
+  }
+
+  render() {
+    this.innerHTML = `
+    <nav role="navigation">
+      <ul>
+      ${routes
+        .filter(route => route.title)
+        .map(
+          route => `
+            <li>
+              <container-link
+                path="${route.path}"
+                title="${route.title}"
+              ></container-link>
+            </li>
+          `
+        )
+        .join('')}
+      </ul>
+    </nav>
+  `
+  }
+
+  connectedCallback() {
+    this.render()
+  }
+}
+```
+
+b) and the sub component link :
+
+```javascript
+export default class ContainerLink extends HTMLElement {
+  constructor() {
+    super()
+  }
+
+  static get tagName() {
+    return 'container-link'
+  }
+
+  connectedCallback() {
+    this.path = this.getAttribute('path')
+    this.title = this.getAttribute('title')
+
+    this.render()
+  }
+
+  render() {
+    this.innerHTML = `
+      <a href="${this.path}">
+        ${this.title}
+      </a>
+    `
+  }
+}
+```
+
+c) and import them in component/index.js
+
+```javascript
+export { default as ContainerLink } from './link'
+export { default as ContainerNavbar } from './navbar'
+```
+
+d) place them in the app component :
+
+```javascript
+  <container-navbar></container-navbar>
+  <div id="app-container">
+
+  </div>
+```
+
 ## Step 2
