@@ -246,10 +246,6 @@
           this.resolveRoute(pathname, event);
         }
       });
-
-      window.onpopstate = event => {
-        this.resolveRoute(location.pathname || '/', event);
-      };
     }
 
     getLinkHref(element) {

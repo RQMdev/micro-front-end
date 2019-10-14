@@ -19,10 +19,6 @@ export default class ContainerRouter extends HTMLElement {
         this.resolveRoute(pathname, event)
       }
     })
-
-    window.onpopstate = event => {
-      this.resolveRoute(location.pathname || '/', event)
-    }
   }
 
   getLinkHref(element) {
