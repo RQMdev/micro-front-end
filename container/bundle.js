@@ -238,10 +238,6 @@
 
     connectedCallback() {
       this.resolveRoute(location.pathname);
-
-      window.onpopstate = event => {
-        this.resolveRoute(location.pathname || '/', event);
-      };
     }
 
     resolveRoute(path, event = new Event('click')) {
