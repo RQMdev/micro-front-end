@@ -239,14 +239,6 @@
     connectedCallback() {
       this.resolveRoute(location.pathname);
 
-      this.addEventListener('click', event => {
-        const href = this.getLinkHref(event.target);
-        if (href) {
-          const { pathname } = new URL(href, location.origin);
-          this.resolveRoute(pathname, event);
-        }
-      });
-
       window.onpopstate = event => {
         this.resolveRoute(location.pathname || '/', event);
       };
