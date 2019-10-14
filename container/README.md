@@ -1,5 +1,5 @@
 ## Step 1
-Fixes React :
+Fixes main navigation reloading app :
 
 ```javascript
 // router.js
