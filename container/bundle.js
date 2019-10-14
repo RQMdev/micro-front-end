@@ -12,133 +12,21 @@
 
     connectedCallback() {
       this.innerHTML = `
-      <container-router>
-        <container-navbar></container-navbar>
-        <div id="app-container">
-        <router-outlet></router-outlet>
-        </div>
-      </container-router>
+     <container-page></container-page>
     `;
     }
   }
 
-  class ContainerLink extends HTMLElement {
-    constructor() {
-      super();
-    }
-
-    static get tagName() {
-      return 'container-link'
-    }
-
-    connectedCallback() {
-      this.path = this.getAttribute('path');
-      this.title = this.getAttribute('title');
-
-      this.render();
-    }
-
-    render() {
-      this.innerHTML = `
-      <a href="${this.path}">
-        ${this.title}
-      </a>
-    `;
-    }
-  }
-
-  const routes = [
-    {
-      path: '/',
-      exact: true,
-      module: {
-        id: 'react-app',
-        url: 'http://localhost:3000',
-        scripts: [
-          '/static/js/runtime-main.js',
-          '/static/js/main.chunk.js',
-          '/static/js/2.chunk.js'
-        ],
-        styles: ['/static/css/main.chunk.css']
-      }
-    },
-    {
-      path: '/chien',
-      title: 'Chien',
-      module: {
-        tag: 'app-root',
-        url: 'http://localhost:4200',
-        scripts: [
-          '/main-es2015.js',
-          '/polyfills-es2015.js',
-          '/runtime-es2015.js',
-          '/styles-es2015.js',
-          '/vendor-es2015.js'
-        ],
-        styles: []
-      }
-    },
-    {
-      path: '/chat',
-      title: 'Chat',
-      module: {
-        id: 'react-app',
-        url: 'http://localhost:3000',
-        scripts: [
-          '/static/js/runtime-main.js',
-          '/static/js/main.chunk.js',
-          '/static/js/2.chunk.js'
-        ],
-        styles: ['/static/css/main.chunk.css']
-      }
-    },
-    {
-      path: '/canard',
-      title: 'Canard',
-      module: {
-        id: 'vue-app',
-        url: 'http://localhost:8080',
-        scripts: ['/js/app.js', '/js/chunk-vendors.js'],
-        styles: ['/css/app.css']
-      }
-    }
-  ];
-
-  class ContainerNavbar extends HTMLElement {
-    constructor() {
-      super();
-    }
-
-    static get tagName() {
-      return 'container-navbar'
-    }
-
-    render() {
-      this.innerHTML = `
-    <nav role="navigation">
-      <ul>
-      ${routes
-        .filter(route => route.title)
-        .map(
-          route => `
-            <li>
-              <container-link
-                path="${route.path}"
-                title="${route.title}"
-              ></container-link>
-            </li>
-          `
-        )
-        .join('')}
-      </ul>
-    </nav>
-  `;
-    }
-
-    connectedCallback() {
-      this.render();
-    }
-  }
+  const reactModule = {
+    id: 'react-app',
+    url: 'http://localhost:3000',
+    scripts: [
+      '/static/js/runtime-main.js',
+      '/static/js/main.chunk.js',
+      '/static/js/2.chunk.js'
+    ],
+    styles: ['/static/css/main.chunk.css']
+  };
 
   class ContainerPage extends HTMLElement {
     constructor() {
@@ -150,20 +38,13 @@
     }
 
     connectedCallback() {
-      const appModule = routes.find(route =>
-        route.exact
-          ? route.path === location.pathname
-          : location.pathname.startsWith(route.path)
-      ).module;
-
-      const frameworkRoot = this.createElementFromID(appModule);
+      const frameworkRoot = this.createElementFromID(reactModule);
       this.appendChild(frameworkRoot);
-
       this.loadScripts(
-        appModule.scripts.map(scriptPath => appModule.url + scriptPath)
+        reactModule.scripts.map(scriptPath => reactModule.url + scriptPath)
       );
       this.loadStyles(
-        appModule.styles.map(stylePath => appModule.url + stylePath)
+        reactModule.styles.map(stylePath => reactModule.url + stylePath)
       );
     }
 
@@ -216,83 +97,9 @@
     }
 
     createElementFromID(appModule) {
-      let root = null;
-      if (appModule.tag) {
-        root = document.createElement(appModule.tag);
-      } else {
-        root = document.createElement('div');
-        root.id = appModule.id;
-      }
+      const root = document.createElement('div');
+      root.id = appModule.id;
       return root
-    }
-  }
-
-  class ContainerRouter extends HTMLElement {
-    constructor() {
-      super();
-    }
-
-    static get tagName() {
-      return 'container-router'
-    }
-
-    connectedCallback() {
-      this.resolveRoute(location.pathname);
-
-      this.addEventListener('click', event => {
-        const href = this.getLinkHref(event.target);
-        if (href) {
-          const { pathname } = new URL(href, location.origin);
-          this.resolveRoute(pathname, event);
-        }
-      });
-    }
-
-    getLinkHref(element) {
-      if (element.tagName === 'A') {
-        return element.href || ''
-      } else if (element.tagName !== 'BODY') {
-        return this.getLinkHref(element.parentElement)
-      } else {
-        return undefined
-      }
-    }
-
-    resolveRoute(path, event = new Event('click')) {
-      console.log('resolveRoute with path :', path);
-      const targetRoute = this.findRoute(path);
-      console.log('targetRoute', targetRoute);
-      if (!targetRoute) {
-        this.resolveRoute('/');
-      }
-      this.changePage(path);
-      this.renderRoute(targetRoute, event, path);
-    }
-
-    findRoute(path) {
-      console.log('this.routes : ', routes);
-      return routes.find(route =>
-        route.exact ? route.path === path : path.startsWith(route.path)
-      )
-    }
-
-    changePage(path) {
-      window.history.pushState(window.history.state, null, path);
-      // window.dispatchEvent(new CustomEvent('page-change'))
-    }
-
-    renderRoute(targetRoute, event, path) {
-      if (this.currentRoute !== targetRoute) {
-        event.preventDefault();
-        const routerOutlet = this.querySelector('router-outlet');
-        routerOutlet.innerHTML = '<container-page></container-page>';
-        this.currentRoute = targetRoute;
-        this.currentPath = path;
-      } else if (path === this.currentPath) {
-        event.preventDefault();
-      } else if (targetRoute.path.startsWith(this.currentRoute.path)) ; else {
-        event.preventDefault();
-      }
     }
   }
 
@@ -301,10 +108,7 @@
   var Components = /*#__PURE__*/Object.freeze({
     __proto__: null,
     ContainerApp: ContainerApp,
-    ContainerLink: ContainerLink,
-    ContainerNavbar: ContainerNavbar,
-    ContainerPage: ContainerPage,
-    ContainerRouter: ContainerRouter
+    ContainerPage: ContainerPage
   });
 
   Object.values(Components).forEach(component =>

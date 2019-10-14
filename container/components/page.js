@@ -1,4 +1,4 @@
-import { routes } from '../config'
+import { reactModule } from '../config'
 
 export default class ContainerPage extends HTMLElement {
   constructor() {
@@ -10,20 +10,13 @@ export default class ContainerPage extends HTMLElement {
   }
 
   connectedCallback() {
-    const appModule = routes.find(route =>
-      route.exact
-        ? route.path === location.pathname
-        : location.pathname.startsWith(route.path)
-    ).module
-
-    const frameworkRoot = this.createElementFromID(appModule)
+    const frameworkRoot = this.createElementFromID(reactModule)
     this.appendChild(frameworkRoot)
-
     this.loadScripts(
-      appModule.scripts.map(scriptPath => appModule.url + scriptPath)
+      reactModule.scripts.map(scriptPath => reactModule.url + scriptPath)
     )
     this.loadStyles(
-      appModule.styles.map(stylePath => appModule.url + stylePath)
+      reactModule.styles.map(stylePath => reactModule.url + stylePath)
     )
   }
 
@@ -76,13 +69,8 @@ export default class ContainerPage extends HTMLElement {
   }
 
   createElementFromID(appModule) {
-    let root = null
-    if (appModule.tag) {
-      root = document.createElement(appModule.tag)
-    } else {
-      root = document.createElement('div')
-      root.id = appModule.id
-    }
+    const root = document.createElement('div')
+    root.id = appModule.id
     return root
   }
 }
